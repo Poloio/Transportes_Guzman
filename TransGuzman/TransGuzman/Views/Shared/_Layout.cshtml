@@ -29,22 +29,9 @@
             </div>
         </nav>
     </header>
-    <!--- Sidemenu -->
-    <div id="sidebar-menu">
-        <ul>
-            <li>
-                <a href="#">Transportistas</a>
-            </li>
-            <li>
-                <a href="#">Vehículos</a>
-            </li>
-            <li>
-                <a href="#">Rutas</a>
-            </li>
-        </ul>
-    </div>
     <div class="container">
         <main role="main" class="pb-3">
+            @Html.Action("Menu", "NavigationController")
             @RenderBody()
         </main>
     </div>

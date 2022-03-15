@@ -10,7 +10,7 @@ namespace TransGuzman_UI.Controllers
     {
         public IActionResult Menu()
         {
-            return PartialView();
+            return PartialView("_Sidebar");
         }
     }
 }
