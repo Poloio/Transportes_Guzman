@@ -1,0 +1,23 @@
+﻿@model IEnumerable<TransGuzman_Entities.Transporter>
+
+<table class="table thead-dark">
+    <thead>
+        <tr>
+            <th scope="col">Número Permiso</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">Año de nacimiento</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transportist in Model)
+        {
+        <tr>
+            <td>@transportist.IDLicense</td>
+            <td>@transportist.FirstName</td>
+            <td>@transportist.LastName</td>
+            <td>@transportist.YearOfBirth</td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,19 @@
+﻿@model TransGuzman_Entities.User
+@{ViewData["Title"] = "Login";}
+<img src="~/images/logo.png" id="logo-login" class="mx-auto d-block"/>
+<div class="mx-auto content" style="width: 40%; min-width:fit-content; margin-top:40px;">
+    <form asp-controller="Login" asp-action="Index" method="post">
+        <div class="form-group">
+            <label for="username-input">Nombre de usuario</label>
+            @Html.TextBoxFor(user => user.Username, new { @class = "form-control" })
+            @Html.ValidationMessageFor(user => user.Username, null, new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            <label for="password-input">Contraseña</label>
+            @Html.PasswordFor(user => user.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(user => user.Password, null, new { @class = "text-danger" })
+            <small id="password-help" class="form-text text-muted">Confía solo en páginas de nuestro dominio: www.transguzman.es</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+</div>

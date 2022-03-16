@@ -23,6 +23,11 @@ namespace TransGuzman.Controllers
             return View();
         }
 
+        public IActionResult Transporters()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

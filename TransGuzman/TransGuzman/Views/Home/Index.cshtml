@@ -1,16 +1,23 @@
 ﻿@{
-    ViewData["Title"] = "Iniciar Sesión";
+    ViewData["Title"] = "Panel";
 }
-<div id="button-panel">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
-        <button id="transporters-button" class="main-button">
-            <b>Transportistas</b>
-        </button>
-    </a>
-    <button id="vehicles-button" class="main-button">
-        <b>Vehículos</b>
-    </button>
-    <button id="routes-button" class="main-button">
-        <b>Rutas</b>
-    </button>
+<div id="button-panel"> 
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <a asp-controller="Home" asp-action="Transporters" class="function-link">
+                </a>
+            </div>
+            <div class="col-sm">
+                <a asp-controller="Home" asp-action="Transporters">
+                    <input type="button" class="btn-primary" value="Vehículos" />
+                </a>
+            </div>
+            <div class="col-sm">
+                <a asp-controller="Home" asp-action="Transporters">
+                    <input type="button" class="btn-primary" value="Rutas" />
+                </a>
+            </div>
+        </div>
+    </div>
 </div>

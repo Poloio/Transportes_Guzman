@@ -1,4 +1,14 @@
-﻿
+﻿#logo-login {
+    width: 30%;
+}
+
+div .content {
+    background-color: darkslategrey;
+    padding: 3%;
+    border-radius: 10px;
+    color: whitesmoke;
+}
+
 #button-panel {
     margin: auto;
     width: 70%;
@@ -23,6 +33,10 @@
     grid-column: 3;
 }
 
+body {
+    background-color: black;
+}
+
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
@@ -34,7 +48,11 @@ a.navbar-brand {
 
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+  color: orange;
+}
+
+a:hover {
+    color:white;
 }
 
 .btn-primary {
@@ -47,6 +65,14 @@ a {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
+}
+
+.navbar-brand {
+    color: white;
+}
+
+.navbar {
+    background-color: darkslategray;
 }
 
 /* Sticky footer styles
@@ -89,6 +115,7 @@ body {
 }
 
 .footer {
+  background-color: darkslategray;
   position: absolute;
   bottom: 0;
   width: 100%;

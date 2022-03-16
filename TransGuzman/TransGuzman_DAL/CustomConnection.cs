@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TransGuzman_DAL
 {
@@ -25,13 +26,12 @@ namespace TransGuzman_DAL
         /// </summary>
         /// <pre>Nada.</pre>
         /// <returns>Una conexión abierta con la base de datos</returns>
-        public SqlConnection getConnection()
+        public async Task<SqlConnection> GetConnectionAsync()
         {
             SqlConnection connection = new SqlConnection();
 
             connection.ConnectionString = $"server={server};database={dataBase};uid={user};pwd={pass};";
-            connection.Open();
-
+            await connection.OpenAsync();
             return connection;
         }
 
@@ -41,11 +41,11 @@ namespace TransGuzman_DAL
         /// <post>La conexion es cerrada</post>
         /// <param name="connection">SqlConnection pr referencia. Conexion a cerrar
         /// </param>
-        public void closeConnection(ref SqlConnection connection)
+        public async Task CloseConnectionAsync(SqlConnection connection)
         {
             try
             {
-                connection.Close();
+                await connection.CloseAsync();
             }
             catch (SqlException)
             {

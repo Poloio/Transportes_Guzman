@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TransGuzman_DAL
 {
@@ -16,15 +17,15 @@ namespace TransGuzman_DAL
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns>true if the credentials are correct.</returns>
-        public static bool CheckUserCredentials(string username, string password)
+        public static async Task<bool> CheckUserCredentialsAsync(string username, string password)
         {
-            var connection = _connectionManager.getConnection();
+            var connection = await _connectionManager.GetConnectionAsync();
             var command = connection.CreateCommand();
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@username", username);
             command.Parameters.AddWithValue("@passsword", password);
             connection.Close();
-            return (int)command.ExecuteScalar() != -1;
+            return (int)await command.ExecuteScalarAsync() != -1;
         }
     }
 }
