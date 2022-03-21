@@ -1,12 +1,12 @@
 ﻿@using System.Data
 @using TransGuzman_UI.Models
-@model TransporterListViewModel
+@model RouteListViewModel
 
-<select id="order-select "class="form-select" aria-label="Default select example" onchange="onSelectChange()">
+<select id="order-select " class="form-select" aria-label="Default select example" onchange="onSelectChange()">
     @foreach (SelectListItem item in Model.OrderSelectItems)
     {
-        <a asp-controller="Transportistas" asp-action="Index" asp-route-id="@item.Value" class="function-link">
-            <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+        <a asp-controller="Routes" asp-action="Index" asp-route-id="@item.Value" class="function-link">
+        <option value="@item.Value" selected="@item.Selected">@item.Text</option>
         </a>
     }
 </select>
@@ -15,35 +15,43 @@
         <tr>
             @foreach (DataColumn column in Model.EntitiesTable.Columns)
             {
-                    <th scope="col">@column.ColumnName.ToUpper().Replace("_"," ")</th><!--En mayúsculas para probar-->
-                }
+                <th scope="col">@column.ColumnName.ToUpper().Replace("_", " ")</th><!--En mayúsculas para probar-->
+            }
         </tr>
     </thead>
     <tbody>
         @foreach (DataRow dataRow in Model.EntitiesTable.Rows)
         {
-            <tr>
-                @foreach (DataColumn dataColumn in Model.EntitiesTable.Columns)
+        <tr>
+            @foreach (DataColumn dataColumn in Model.EntitiesTable.Columns)
+            {
+                if (dataRow[dataColumn.ColumnName] == DBNull.Value)
+                {
+                    
+                    <td><a asp-action="Editar">Asignar</a></td>
+                }
+                else
                 {
                     <td>@dataRow[dataColumn.ColumnName]</td>
                 }
+            }
             <td>
-                <a asp-controller="Transportistas" asp-action="Detalles" asp-route-employeeId="@dataRow["id_empleado"].ToString()" class="function-link">
+                <a asp-controller="Routes" asp-action="Detalles" asp-route-routeNumber="@dataRow["numero_ruta"]" class="function-link">
                     Detalles
                 </a>
                 |
-                <a asp-controller="Transportistas" asp-action="Editar" asp-route-employeeId="@dataRow["id_empleado"].ToString()" class="function-link">
+                <a asp-controller="Routes" asp-action="Editar" asp-route-routeNumber="@dataRow["numero_ruta"]" class="function-link">
                     Editar
                 </a>
                 |
-                <a asp-controller="Transportistas" asp-action="Borrar" asp-route-employeeId="@dataRow["id_empleado"].ToString()" class="function-link text-danger"
+                <a asp-controller="Routes" asp-action="Borrar" asp-route-routeNumber="@dataRow["numero_ruta"]" class="function-link text-danger"
                    onclick="return confirmDelete()">
                     Borrar
                 </a>
             </td>
-            </tr>
-         }
-        </tbody>
+        </tr>
+        }
+    </tbody>
 </table>
 <script>
     function confirmDelete() {

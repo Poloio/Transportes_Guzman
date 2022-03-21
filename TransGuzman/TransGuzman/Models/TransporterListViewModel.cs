@@ -5,15 +5,16 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using TransGuzman_BL;
+using TransGuzman_UI.Models.Interfaces;
 
 namespace TransGuzman_UI.Models
 {
-    public class TransporterListViewModel
+    public class TransporterListViewModel : IListViewmodel
     {
         public List<SelectListItem> OrderSelectItems { get; set; }
         public SelectListItem SelectedListItem { get; set; }
-        public DataTable TransportersTable { get; set; }
-        public string SortMode;
+        public DataTable EntitiesTable { get; set; }
+        public string SortMode { get; set; }
         
         public TransporterListViewModel (string sortMode)
         {
@@ -49,12 +50,12 @@ namespace TransGuzman_UI.Models
             }
         }
 
-        public async Task FillTable()
+        public async Task FillTableAsync()
         {
-            TransportersTable = await GetItemsAsync();
-            var tempTableView = TransportersTable.DefaultView;
+            EntitiesTable = await GetItemsAsync();
+            var tempTableView = EntitiesTable.DefaultView;
             tempTableView = OrderTable(tempTableView, SortMode);
-            TransportersTable = tempTableView.ToTable();
+            EntitiesTable = tempTableView.ToTable();
         }
 
         private DataView OrderTable(DataView tempTableView, string sortMode)

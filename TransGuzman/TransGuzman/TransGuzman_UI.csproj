@@ -14,4 +14,8 @@
     <ProjectReference Include="..\TransGuzman_Entities\TransGuzman_Entities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Scripts\" />
+  </ItemGroup>
+
 </Project>

@@ -16,7 +16,7 @@ namespace TransGuzman_BL
         /// <returns>a list of <see cref="Transporter"/>.</returns>
         public static async Task<List<Transporter>> GetAllTransportersAsyncBL()
         {
-            return await TransportersDAL.GetAllTransportersAsyncDAL();
+            return await TransportersDAL.GetAllAsyncDAL();
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace TransGuzman_BL
         /// <returns>a <see cref="DataTable"/>.</returns>
         public static async Task<DataTable> GetTransportersDataTableAsync()
         {
-            return await TransportersDAL.GetTransportersDataTableAsync();
+            return await TransportersDAL.GetDataTableAsync();
         }
         
         /// <summary>
@@ -51,6 +51,11 @@ namespace TransGuzman_BL
         public static async Task<bool> DeleteByIDAsyncBL(string employeeId)
         {
             return await TransportersDAL.DeleteByIDAsyncDAL(employeeId);
+        }
+
+        public static async Task<string> GetTransporterIDByLicenseAsyncBL(string licenseNumber)
+        {
+            return await TransportersDAL.GetTransporterIDByLicenseAsyncDAL(licenseNumber);
         }
     }
 }

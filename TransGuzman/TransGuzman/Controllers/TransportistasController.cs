@@ -25,12 +25,18 @@ namespace TransGuzman_UI.Controllers
                 result = RedirectToAction("Index");
             } else
             {
-                var transporter = await TransportersBL.GetTransporterAsyncBL(employeeId);
-                if (transporter != null)
-                    result = View(transporter);
-                else //IF transporter doesn't exist
+                try
+                {
+                    var transporter = await TransportersBL.GetTransporterAsyncBL(employeeId);
+                    if (transporter != null)
+                        result = View(transporter);
+                    else //IF transporter doesn't exist
+                        result = RedirectToAction("Error", "Home");
+                } catch (Exception e)
+                {
                     result = RedirectToAction("Error", "Home");
-            }
+                }
+            }// END Null check
             return result;
         }
 
@@ -46,14 +52,21 @@ namespace TransGuzman_UI.Controllers
 
             IActionResult result;
             if (viewmodel != null)
-            {
-                bool licenseOk = await DriverLicensesBL.CreateNewAsyncBL(viewmodel.License);
-                bool transporterOk = await TransportersBL.CreateNewAsyncBL(viewmodel.Transporter);
-                bool succeeded = licenseOk && transporterOk;
-                if (succeeded)
+            { 
+                try
                 {
-                    result = View("Index");
-                } else
+                    bool licenseOk = await DriverLicensesBL.CreateNewAsyncBL(viewmodel.License);
+                    bool transporterOk = await TransportersBL.CreateNewAsyncBL(viewmodel.Transporter);
+                    bool succeeded = licenseOk && transporterOk;
+                    if (succeeded)
+                    {
+                        result = View("Index");
+                    }
+                    else
+                    {
+                        result = RedirectToAction("Error", "Home");
+                    }
+                } catch (Exception e)
                 {
                     result = RedirectToAction("Error", "Home");
                 }
@@ -74,8 +87,14 @@ namespace TransGuzman_UI.Controllers
             }
             else
             {
-                var transporter = await TransportersBL.GetTransporterAsyncBL(employeeId);
-                result = View(transporter);
+                try
+                {
+                    var transporter = await TransportersBL.GetTransporterAsyncBL(employeeId);
+                    result = View(transporter);
+                } catch (Exception e)
+                {
+                    result = RedirectToAction("Error", "Home");
+                }
             }
             return result;
         }
