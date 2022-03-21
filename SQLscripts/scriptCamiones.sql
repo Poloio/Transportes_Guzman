@@ -52,7 +52,7 @@ CREATE TABLE provincias (
 )
 GO
 
-CREATE TABLE ruta (
+CREATE TABLE rutas (
 	numero_ruta INT IDENTITY NOT NULL,
 	id_conductor UNIQUEIDENTIFIER NULL,
 	matricula_vehiculo CHAR(7) NULL,
@@ -60,13 +60,15 @@ CREATE TABLE ruta (
 	provincia_origen SMALLINT NOT NULL,
 	provincia_destino SMALLINT NOT NULL,
 	km_recorridos INT NULL,
-	CONSTRAINT PKRutasRealizadas PRIMARY KEY (numero_ruta),
+	CONSTRAINT PKRutas PRIMARY KEY (numero_ruta),
 
 	CONSTRAINT FKRutasTransportistas FOREIGN KEY (id_conductor)
-		REFERENCES transportistas (id_empleado),
+		REFERENCES transportistas (id_empleado)
+		ON DELETE NO ACTION ON UPDATE CASCADE,
 
 	CONSTRAINT FKRutasVehiculos FOREIGN KEY (matricula_vehiculo)
-		REFERENCES vehiculos (matricula),
+		REFERENCES vehiculos (matricula)
+		ON DELETE NO ACTION ON UPDATE CASCADE,
 
 	CONSTRAINT FKRutasProvinciaOrigen FOREIGN KEY (provincia_origen)
 		REFERENCES provincias (id_provincia),
@@ -115,7 +117,7 @@ INNER JOIN provincias AS PRO
 	ON RU.provincia_origen = PRO.id_provincia
 INNER JOIN provincias AS PRD
 	ON RU.provincia_destino = PRD.id_provincia
-GROUP BY RU.numero_ruta, TR.permiso_dni, TR.nombre, TR.apellidos RU.matricula_vehiculo,
+GROUP BY RU.numero_ruta, TR.permiso_dni, TR.nombre, TR.apellidos, RU.matricula_vehiculo,
 	RU.km_recorridos, PRO.nombre_provincia, PRD.nombre_provincia
 GO
 
@@ -205,7 +207,9 @@ GO
 
 
 INSERT INTO rutas VALUES
-	('65211846-8355-4C6E-A210-2B7B63B2E6F0','1292JFJ', 51, 43, 900)
-	,('21411820-8BCA-41A8-A5A5-5B954919F1D7','8289DWD', 43, 51, 200)
-	,('E7526A5E-41B4-42A0-8CF0-65E940936EE7','8289DWD', 51, 51, 100)
+	(NULL,'1292JFJ', 51, 43, 900)
+	,('E7526A5E-41B4-42A0-8CF0-65E940936EE7','8289DWD', 43, 51, NULL)
+	,('E05FCC12-4B28-4104-9DE4-C721786E4CEC',NULL, 51, 51, NULL)
+	SELECT * FROM rutas
 
+	select * from vehiculos
