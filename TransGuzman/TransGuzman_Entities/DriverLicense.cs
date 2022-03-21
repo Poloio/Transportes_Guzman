@@ -9,5 +9,12 @@ namespace TransGuzman_Entities
         public string LicenseNumber { get; set; }
         public string LicenseType { get; set; }
         public DateTime ExpireDate { get; set; }
+
+        public DriverLicense(string licenseNumber, string licenseType, DateTime expireDate)
+        {
+            LicenseNumber = licenseNumber;
+            LicenseType = licenseType;
+            ExpireDate = expireDate;
+        }
     }
 }

@@ -1,23 +1,62 @@
-﻿@model IEnumerable<TransGuzman_Entities.Transporter>
+﻿@using System.Data
+@using TransGuzman_UI.Models
+@model TransporterListViewModel
 
-<table class="table thead-dark">
+<select id="order-select "class="form-select" aria-label="Default select example" onchange="onSelectChange()">
+    @foreach (SelectListItem item in Model.OrderSelectItems)
+    {
+        <a asp-controller="Transportistas" asp-action="Index" asp-route-id="@item.Value" class="function-link">
+            <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+        </a>
+    }
+</select>
+<table class="table table-light table-striped">
     <thead>
         <tr>
-            <th scope="col">Número Permiso</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Apellidos</th>
-            <th scope="col">Año de nacimiento</th>
+            @foreach (DataColumn column in Model.TransportersTable.Columns)
+                {
+                    <th scope="col">@column.ColumnName.ToUpper().Replace("_"," ")</th><!--En mayúsculas para probar-->
+                }
         </tr>
     </thead>
     <tbody>
-        @foreach (var transportist in Model)
+        @foreach (DataRow dataRow in Model.TransportersTable.Rows)
         {
-        <tr>
-            <td>@transportist.IDLicense</td>
-            <td>@transportist.FirstName</td>
-            <td>@transportist.LastName</td>
-            <td>@transportist.YearOfBirth</td>
-        </tr>
-        }
-    </tbody>
+            <tr>
+                @foreach (DataColumn dataColumn in Model.TransportersTable.Columns)
+                {
+                    <td>@dataRow[dataColumn.ColumnName]</td>
+                }
+            <td>
+                <a asp-controller="Transportistas" asp-action="Detalles" asp-route-employeeId="@dataRow["id_empleado"].ToString()" class="function-link">
+                    Detalles
+                </a>
+                |
+                <a asp-controller="Transportistas" asp-action="Editar" asp-route-employeeId="@dataRow["id_empleado"].ToString()" class="function-link">
+                    Editar
+                </a>
+                |
+                <a asp-controller="Transportistas" asp-action="Borrar" asp-route-employeeId="@dataRow["id_empleado"].ToString()" class="function-link text-danger"
+                   onclick="return confirmDelete()">
+                    Borrar
+                </a>
+            </td>
+            </tr>
+         }
+        </tbody>
 </table>
+<script>
+    function confirmDelete() {
+        return confirm("Esta operación es irreversible. ¿Seguro que quieres borrar el activo?");
+    }
+
+    //TODO Hacer que funcione... Se me resiste JQuery. Con entity framework es más fácil.
+    function onSelectChange() {
+        var select = document.getElementById("order-select");
+        var item = $('#order-select').first(":selected");
+        $.ajax({
+            url: 'Transportistas?sortMode=' + item.getAttribute("value"),
+            data: { id: id }
+        })
+    }
+</script>

@@ -1,0 +1,22 @@
+﻿@model TransGuzman_Entities.Transporter
+<div class="content">
+    @await Component.InvokeAsync("TransporterDetails", new { transporter = Model })
+    <div class="options">
+        <a asp-action="Editar" asp-route-employeeId="@Model.EmployeeID">
+            <input type="submit" class="btn btn-primary" value="Editar empleado" />
+        </a>
+        <a asp-action="Index">
+            <input type="submit" class="btn btn-secondary" value="Volver a la lista" />
+        </a>
+        <a asp-action="Borrar" asp-route-employeeId="@Model.EmployeeID" onclick="return confirmClick()">
+            <input type="submit" class="btn btn-danger" value="Borrar empleado" />
+        </a>
+    </div>
+</div>
+
+<script>
+    function confirmClick() {
+        return confirm("Esta operación es irreversible. ¿Seguro que quieres borrar el activo?");
+    }
+</script>
+

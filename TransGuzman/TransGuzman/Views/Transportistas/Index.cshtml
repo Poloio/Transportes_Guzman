@@ -1,0 +1,13 @@
+﻿
+@model string
+@{
+    ViewData["Title"] = "Transportistas";
+}
+<div class="content">
+    <p class="h4 text-light">Transportistas Activos</p>
+    <hr />
+    <a asp-action="Crear">
+        <input type="submit" class="btn btn-success" value="Crear nuevo" />
+    </a>
+    @await Component.InvokeAsync("TransporterList", new { sortMode = Model })
+</div>

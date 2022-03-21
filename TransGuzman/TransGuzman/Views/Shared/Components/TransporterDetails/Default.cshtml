@@ -1,0 +1,37 @@
+﻿@model TransGuzman_Entities.Transporter
+    <h4>Detalles de transportista</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            <label asp-for="EmployeeID"></label>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EmployeeID)
+        </dd>
+        <dt class="col-sm-2">
+            <label asp-for="IDLicense"></label>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IDLicense)
+        </dd>
+        <dt class="col-sm-2">
+            <label asp-for="FirstName"></label>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt class="col-sm-2">
+            <label asp-for="LastName"></label>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt class="col-sm-2">
+            <label asp-for="YearOfBirth"></label>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.YearOfBirth)
+        </dd>
+    </dl>
+</div>
+

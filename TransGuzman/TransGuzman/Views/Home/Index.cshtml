@@ -2,22 +2,21 @@
     ViewData["Title"] = "Panel";
 }
 <div id="button-panel"> 
-    <div class="container">
-        <div class="row">
-            <div class="col-sm">
-                <a asp-controller="Home" asp-action="Transporters" class="function-link">
-                </a>
-            </div>
-            <div class="col-sm">
-                <a asp-controller="Home" asp-action="Transporters">
-                    <input type="button" class="btn-primary" value="Vehículos" />
-                </a>
-            </div>
-            <div class="col-sm">
-                <a asp-controller="Home" asp-action="Transporters">
-                    <input type="button" class="btn-primary" value="Rutas" />
-                </a>
-            </div>
+    <div class="container row mt-5 p-5">
+        <div class="col-4 text-center d-flex">
+            <a asp-controller="Transportistas" asp-action="Index" class="function-link">
+                <input type="button" class="btn btn-primary p-4 rounded-0" value="Transportistas" />
+            </a>
+        </div>
+        <div class="col-4 text-center d-flex">
+            <a asp-controller="Transportistas" asp-action="Index" class="function-link">
+                <input type="button" class="btn btn-primary p-4 rounded-0" value="Vehículos" />
+            </a>
+        </div>
+        <div class="col-4 text-center d-flex">
+            <a asp-controller="Transportistas" asp-action="Index" class="function-link">
+                <input type="button" class="btn btn-primary p-4 rounded-0" value="Rutas" />
+            </a>
         </div>
     </div>
 </div>

@@ -1,0 +1,50 @@
+﻿@model TransGuzman_Entities.Transporter
+
+<h4>Editar transportista</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Editar" method="post">
+            <!--asp-action="Editar"-->
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(transporter => transporter.EmployeeID)
+            <div class="form-group">
+                <label asp-for="IDLicense" class="control-label"></label>
+                <input asp-for="IDLicense" class="form-control" />
+                <span asp-validation-for="IDLicense" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="YearOfBirth" class="control-label"></label>
+                <input asp-for="YearOfBirth" class="form-control" />
+                <span asp-validation-for="YearOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Aplicar cambios" class="btn btn-primary" onclick="return confirmSubmit()" />
+                <a asp-action="Detalles" asp-controller="Transportistas" asp-route-employeeId="@Model.EmployeeID">
+                    <input type="button" value="Cancelar" class="btn btn-secondary" />
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function confirmSubmit() {
+        var agree = confirm("¿Seguro que quieres aplicar los cambios?")
+        return agree;
+    }
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

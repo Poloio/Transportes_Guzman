@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
 using System.Threading.Tasks;
 using TransGuzman_Entities;
 
@@ -46,7 +45,20 @@ namespace TransGuzman_DAL
             return returnList;
         }
 
-        public static async Task<DataTable> GetTransportersDataTable()
+        public async static Task<bool> DeleteByIDAsyncDAL(string employeeId)
+        {
+            var connection = await _connectionManager.GetConnectionAsync();
+            var command = connection.CreateCommand();
+            command.CommandText = "DELETE FROM transportistas WHERE id_empleado = @employeeId";
+            command.Parameters.AddWithValue("@employeeId", employeeId);
+            return await command.ExecuteNonQueryAsync() > 0;
+        }
+
+        /// <summary>
+        /// Gets all transporters as a DataTable from the DB asynchronically.
+        /// </summary>
+        /// <returns>a <see cref="DataTable"/></returns>
+        public static async Task<DataTable> GetTransportersDataTableAsync()
         {
             var dataTable = new DataTable();
             var connection = await _connectionManager.GetConnectionAsync();
@@ -67,13 +79,13 @@ namespace TransGuzman_DAL
         /// </summary>
         /// <param name="id"></param>
         /// <returns>a <see cref="Transporter"/> object.</returns>
-        public static async Task<Transporter> GetTransporterAsyncDAL(string id)
+        public static async Task<Transporter> GetTransporterAsyncDAL(string employeeId)
         {
             Transporter transporter = null;
             var connection = await _connectionManager.GetConnectionAsync();
             var command = connection.CreateCommand();
             command.CommandText = "SELECT * FROM transportistas WHERE id_empleado = @id";
-            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@id", employeeId);
 
             using (var reader = await command.ExecuteReaderAsync())
             {
@@ -82,11 +94,11 @@ namespace TransGuzman_DAL
                 {
                     object[] columns = new object[5];
                     reader.GetValues(columns);
-                    //transporter.EmployeeID = (string)columns[0];
+                    transporter.EmployeeID = columns[0].ToString();
                     transporter.IDLicense = (string)columns[1];
-                    transporter.LastName = (string)columns[2];
+                    transporter.FirstName = (string)columns[2];
                     transporter.LastName = (string)columns[3];
-                    transporter.YearOfBirth = (int)columns[4];
+                    transporter.YearOfBirth = Convert.ToInt32(columns[4]);//Viene un Int16, lo paso a Int32
                 }
             }
             await _connectionManager.CloseConnectionAsync(connection);
@@ -100,17 +112,17 @@ namespace TransGuzman_DAL
         /// </summary>
         /// <param name="newTransporter"></param>
         /// <returns>true if any change was made.</returns>
-        public static async Task<bool> UpdateTransporterAsyncDal(Transporter newTransporter)
+        public static async Task<bool> UpdateTransporterAsyncDAL(Transporter newTransporter)
         {
             var connection = await _connectionManager.GetConnectionAsync();
             var command = connection.CreateCommand();
-            command.CommandText = "UPDATE transporters SET permiso_dni = @license, nombre = @firstName, apellidos = @lastName, anio_nacimiento = @yearOfBirth" +
+            command.CommandText = "UPDATE transportistas SET permiso_dni = @license, nombre = @firstName, apellidos = @lastName, anio_nacimiento = @yearOfBirth " +
                 "WHERE id_empleado = @id";
-            command.Parameters.AddWithValue("@id", newTransporter.EmployeeID);
+            command.Parameters.AddWithValue("@id", new Guid(newTransporter.EmployeeID));
             command.Parameters.AddWithValue("@license", newTransporter.IDLicense);
             command.Parameters.AddWithValue("@firstName", newTransporter.FirstName);
-            command.Parameters.AddWithValue("@lastName", newTransporter.EmployeeID);
-            command.Parameters.AddWithValue("@yearOfBirth", newTransporter.EmployeeID);
+            command.Parameters.AddWithValue("@lastName", newTransporter.LastName);
+            command.Parameters.AddWithValue("@yearOfBirth", newTransporter.YearOfBirth);
 
             var suceeded = await command.ExecuteNonQueryAsync() > 0;
             connection.Close();
@@ -122,16 +134,15 @@ namespace TransGuzman_DAL
         /// </summary>
         /// <param name="newTransporter"></param>
         /// <returns>true if any change was made.</returns>
-        public static async Task<bool> CreateTransporterAsyncDAL(Transporter newTransporter)
+        public static async Task<bool> CreateNewAsyncDAL(Transporter newTransporter)
         {
             var connection = await _connectionManager.GetConnectionAsync();
             var command = connection.CreateCommand();
             command.CommandText = "INSERT INTO transportistas VALUES (NEWID(), @license, @firstName, @lastName, @yearOfBirth)";
-            command.Parameters.AddWithValue("@id", newTransporter.EmployeeID);
             command.Parameters.AddWithValue("@license", newTransporter.IDLicense);
             command.Parameters.AddWithValue("@firstName", newTransporter.FirstName);
-            command.Parameters.AddWithValue("@lastName", newTransporter.EmployeeID);
-            command.Parameters.AddWithValue("@yearOfBirth", newTransporter.EmployeeID);
+            command.Parameters.AddWithValue("@lastName", newTransporter.LastName);
+            command.Parameters.AddWithValue("@yearOfBirth", newTransporter.YearOfBirth);
 
             var succeeded = await command.ExecuteNonQueryAsync() > 0;
             await _connectionManager.CloseConnectionAsync(connection);
