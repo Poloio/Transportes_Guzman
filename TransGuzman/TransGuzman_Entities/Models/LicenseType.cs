@@ -4,9 +4,11 @@ using System.Text;
 
 namespace TransGuzman_Entities
 {
-    public class Province
+    public class LicenseType
     {
-        public int ID { get; set; }
         public string Name { get; set; }
+
+        public ICollection<Transporter> Transporters { get; set; }
+        public ICollection<Vehicle> Vehicles { get; set; }
     }
 }

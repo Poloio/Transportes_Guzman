@@ -77,6 +77,35 @@ CREATE TABLE rutas (
 )
 GO
 
+CREATE TABLE talleres
+(
+	id_taller INT IDENTITY,
+	nombre_taller VARCHAR(40)NOT NULL,
+	provincia SMALLINT NOT NULL,
+	direccion VARCHAR(100) NULL,
+	numero_telefono VARCHAR(15) NULL,
+	CONSTRAINT PKTalleres PRIMARY KEY (id_taller),
+	CONSTRAINT FKTalleresProvincias	FOREIGN KEY (provincia)
+		REFERENCES provincias (id_provincia)
+)
+GO
+
+CREATE TABLE averias 
+(
+	id_averia INT IDENTITY ,
+	matricula_vehiculo CHAR(7) NOT NULL,
+	id_taller INT NULL,
+	diagnostico VARCHAR(250) NULL,
+	nombre_mecanico VARCHAR(50) NULL,
+	coste MONEY NULL,
+	cerrada BIT NOT NULL,
+	CONSTRAINT PKAverias PRIMARY KEY (id_averia),
+	CONSTRAINT FKAveriasVehiculos FOREIGN KEY (matricula_vehiculo)
+		REFERENCES vehiculos (matricula) ON DELETE NO ACTION ON UPDATE CASCADE,
+	CONSTRAINT FKAveriasTalleres FOREIGN KEY (id_taller)
+		REFERENCES talleres (id_taller) ON DELETE NO ACTION ON UPDATE CASCADE
+)
+GO
 -- FUNCIONES ------------------------
 
 CREATE OR ALTER FUNCTION KmRecorridosDeVehiculo(@matricula CHAR(7))
@@ -92,10 +121,10 @@ GO
 CREATE OR ALTER FUNCTION VehiculosKmsRecorridos()
 RETURNS TABLE AS
 RETURN
-SELECT VE.matricula, VE.modelo, SUM(ISNULL(RU.km_recorridos,0)) AS KmRecorridos FROM vehiculos AS VE
-LEFT JOIN rutas_realizadas AS RU
+SELECT VE.matricula, VE.modelo, VE.permiso_necesario, SUM(ISNULL(RU.km_recorridos,0)) AS km_recorridos FROM vehiculos AS VE
+LEFT JOIN rutas AS RU
 	ON RU.matricula_vehiculo = VE.matricula
-GROUP BY VE.matricula, VE.modelo
+GROUP BY VE.matricula, VE.modelo, VE.permiso_necesario
 GO
 
 CREATE OR ALTER FUNCTION DisplayRutas()

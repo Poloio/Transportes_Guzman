@@ -10,9 +10,11 @@ namespace TransGuzman_UI.ViewComponents
 {
     public class TransporterCreateViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View(new TransporterWithLicenseViewModel());
+            var viewmodel = new TransporterCreateViewModel();
+            await viewmodel.FillLicenseTypeOptions();
+            return View(viewmodel);
         }
     }
 }

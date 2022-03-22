@@ -33,7 +33,7 @@ namespace TransGuzman_DAL
                     object[] columns = new object[5];
 
                     reader.GetValues(columns);
-                    nextTransporter.EmployeeID = columns[0].ToString();
+                    nextTransporter.TransporterID = columns[0].ToString();
                     nextTransporter.IDLicense = (string)columns[1];
                     nextTransporter.FirstName = (string)columns[2];
                     nextTransporter.LastName = (string)columns[3];
@@ -85,7 +85,7 @@ namespace TransGuzman_DAL
                 {
                     object[] columns = new object[5];
                     reader.GetValues(columns);
-                    transporter.EmployeeID = columns[0].ToString();
+                    transporter.TransporterID = columns[0].ToString();
                     transporter.IDLicense = (string)columns[1];
                     transporter.FirstName = (string)columns[2];
                     transporter.LastName = (string)columns[3];
@@ -149,7 +149,7 @@ namespace TransGuzman_DAL
             var command = connection.CreateCommand();
             command.CommandText = "UPDATE transportistas SET permiso_dni = @license, nombre = @firstName, apellidos = @lastName, anio_nacimiento = @yearOfBirth " +
                 "WHERE id_empleado = @id";
-            command.Parameters.AddWithValue("@id", new Guid(newTransporter.EmployeeID));
+            command.Parameters.AddWithValue("@id", new Guid(newTransporter.TransporterID));
             command.Parameters.AddWithValue("@license", newTransporter.IDLicense);
             command.Parameters.AddWithValue("@firstName", newTransporter.FirstName);
             command.Parameters.AddWithValue("@lastName", newTransporter.LastName);

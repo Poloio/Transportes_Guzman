@@ -1,13 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using TransGuzman_DAL;
 using TransGuzman_Entities;
 
 namespace TransGuzman_UI.Models
 {
-    public class TransporterWithLicenseViewModel
+    public class TransporterCreateViewModel
     {
         [Required(ErrorMessage = "Campo requerido")]
         [Display(Name = "DNI/Permiso")]
@@ -44,6 +46,18 @@ namespace TransGuzman_UI.Models
             get
             {
                 return new DriverLicense(IDLicense, LicenseType, ExpireDate);
+            }
+        }
+
+        public List<SelectListItem> LicenseTypeOptions { get; set; }
+
+        public async Task FillLicenseTypeOptions()
+        {
+            LicenseTypeOptions = new List<SelectListItem>();
+            var typeList = await DriverLicensesDAL.GetLicenseTypesAsync();
+            foreach (var type in typeList)
+            {
+                LicenseTypeOptions.Add(new SelectListItem { Text = type.Name, Value = type.Name });
             }
         }
     }

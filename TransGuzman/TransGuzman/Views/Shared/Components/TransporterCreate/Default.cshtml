@@ -1,6 +1,6 @@
-﻿@model TransGuzman_UI.Models.TransporterWithLicenseViewModel
+﻿@model TransGuzman_UI.Models.TransporterCreateViewModel
 
-<h4>Transporter</h4>
+<h4>Nuevo Transportista</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -28,7 +28,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="LicenseType" class="control-label"></label>
-                <input asp-for="LicenseType" class="form-control" />
+                <select name="LicenseType" class="form-select">
+                    <option value="">Elige una licencia</option>
+                    @foreach (SelectListItem item in Model.LicenseTypeOptions)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+                </select>
                 <span asp-validation-for="LicenseType" class="text-danger"></span>
             </div>
             <div class="form-group">

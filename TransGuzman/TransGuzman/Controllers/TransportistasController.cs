@@ -46,7 +46,7 @@ namespace TransGuzman_UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Crear(TransporterWithLicenseViewModel viewmodel)
+        public async Task<IActionResult> Crear(TransporterCreateViewModel viewmodel)
         {
             //DataAnnotations TODO
 
@@ -102,7 +102,7 @@ namespace TransGuzman_UI.Controllers
         [HttpPost]
         public async Task<IActionResult> Editar(Transporter newTransporter)
         {
-            var EmployeeID = newTransporter.EmployeeID;
+            var EmployeeID = newTransporter.TransporterID;
             var IDLicense = newTransporter.IDLicense;
             var FirstName = newTransporter.FirstName;
             var LastName = newTransporter.LastName;
@@ -112,7 +112,7 @@ namespace TransGuzman_UI.Controllers
             if (ModelState.IsValid)
             {
                 var updatedTransporter = new Transporter();
-                updatedTransporter.EmployeeID = EmployeeID;
+                updatedTransporter.TransporterID = EmployeeID;
                 updatedTransporter.IDLicense = IDLicense;
                 updatedTransporter.FirstName = FirstName;
                 updatedTransporter.LastName = LastName;

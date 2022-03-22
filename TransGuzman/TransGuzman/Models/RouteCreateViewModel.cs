@@ -8,7 +8,7 @@ using TransGuzman_DAL;
 
 namespace TransGuzman_UI.Models
 {
-    public class CreateRouteViewModel
+    public class RouteCreateViewModel
     {
         [Display(Name = "DNI de conductor")]
         public string DriverLicenseNumber { get; set; }

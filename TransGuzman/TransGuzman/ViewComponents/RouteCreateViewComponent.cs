@@ -12,7 +12,7 @@ namespace TransGuzman_UI.ViewComponents
     {
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var vm = new CreateRouteViewModel();
+            var vm = new RouteCreateViewModel();
             await vm.FillProvinceOptions();
             return View(vm);
         }

@@ -32,12 +32,12 @@ namespace TransGuzman_DAL
                     object[] columns = new object[5];
 
                     reader.GetValues(columns);
-                    nextRoute.Number = (int)columns[0];
-                    nextRoute.DriverID = (string)columns[1];
-                    nextRoute.TruckLicenseNumber = (string)columns[2];
-                    nextRoute.OriginCode = (int)columns[3];
-                    nextRoute.DestinationCode = (int)columns[4];
-                    nextRoute.Kilometers = (int)columns[5];
+                    nextRoute.RouteID = (int)columns[0];
+                    nextRoute.TransporterID = (string)columns[1];
+                    nextRoute.VehicleID = (string)columns[2];
+                    nextRoute.OriginProvinceID = (int)columns[3];
+                    nextRoute.DestinatinProvinceID = (int)columns[4];
+                    nextRoute.TraveledKM = (int)columns[5];
                     returnList.Add(nextRoute);
                 }
             }
@@ -94,12 +94,12 @@ namespace TransGuzman_DAL
                 {
                     object[] columns = new object[5];
                     reader.GetValues(columns);
-                    route.Number = (int)columns[0];
-                    route.DriverID = (string)columns[1];
-                    route.TruckLicenseNumber = (string)columns[2];
-                    route.OriginCode = (int)columns[3];
-                    route.DestinationCode = (int)columns[4];
-                    route.Kilometers = (int)columns[5];
+                    route.RouteID = (int)columns[0];
+                    route.TransporterID = (string)columns[1];
+                    route.VehicleID = (string)columns[2];
+                    route.OriginProvinceID = (int)columns[3];
+                    route.DestinatinProvinceID = (int)columns[4];
+                    route.TraveledKM = (int)columns[5];
                 }
             }
             await _connectionManager.CloseConnectionAsync(connection);
@@ -119,12 +119,12 @@ namespace TransGuzman_DAL
             var command = connection.CreateCommand();
             command.CommandText = "UPDATE route SET id_conductor = @driverId, matricula_vehilculo = @truck, " +
                 "provincia_origen = @origin, provincia_destino = @destination, km_recorridos = @distance WHERE numero_ruta = @routeNumber";
-            command.Parameters.AddWithValue("@routeNumber", route.Number);
-            command.Parameters.AddWithValue("@driverId", route.DriverID);
-            command.Parameters.AddWithValue("@truck", route.TruckLicenseNumber);
-            command.Parameters.AddWithValue("@origin", route.OriginCode);
-            command.Parameters.AddWithValue("@destination", route.DestinationCode);
-            command.Parameters.AddWithValue("@distance", route.Kilometers);
+            command.Parameters.AddWithValue("@routeNumber", route.RouteID);
+            command.Parameters.AddWithValue("@driverId", route.TransporterID);
+            command.Parameters.AddWithValue("@truck", route.VehicleID);
+            command.Parameters.AddWithValue("@origin", route.OriginProvinceID);
+            command.Parameters.AddWithValue("@destination", route.DestinatinProvinceID);
+            command.Parameters.AddWithValue("@distance", route.TraveledKM);
             var suceeded = await command.ExecuteNonQueryAsync() > 0;
             await _connectionManager.CloseConnectionAsync(connection);
             return suceeded;
@@ -141,23 +141,23 @@ namespace TransGuzman_DAL
             var command = connection.CreateCommand();
             command.CommandText = "INSERT INTO rutas VALUES (@driverId, @truck, @origin, @destination, @distance)";
 
-            if (String.IsNullOrEmpty(newRoute.DriverID))
+            if (String.IsNullOrEmpty(newRoute.TransporterID))
                 command.Parameters.AddWithValue("@driverId", DBNull.Value);
             else
-                command.Parameters.AddWithValue("@driverId", newRoute.DriverID);
+                command.Parameters.AddWithValue("@driverId", newRoute.TransporterID);
 
-            if (String.IsNullOrEmpty(newRoute.TruckLicenseNumber))
+            if (String.IsNullOrEmpty(newRoute.VehicleID))
                 command.Parameters.AddWithValue("@truck", DBNull.Value);
             else
-                command.Parameters.AddWithValue("@truck", newRoute.TruckLicenseNumber);
+                command.Parameters.AddWithValue("@truck", newRoute.VehicleID);
 
-            command.Parameters.AddWithValue("@origin", newRoute.OriginCode);
-            command.Parameters.AddWithValue("@destination", newRoute.DestinationCode);
+            command.Parameters.AddWithValue("@origin", newRoute.OriginProvinceID);
+            command.Parameters.AddWithValue("@destination", newRoute.DestinatinProvinceID);
 
-            if (newRoute.Kilometers == 0)
+            if (newRoute.TraveledKM == 0)
                 command.Parameters.AddWithValue("@distance", DBNull.Value);
             else
-                command.Parameters.AddWithValue("@distance", newRoute.Kilometers);
+                command.Parameters.AddWithValue("@distance", newRoute.TraveledKM);
 
             var succeeded = await command.ExecuteNonQueryAsync() > 0;
             await _connectionManager.CloseConnectionAsync(connection);

@@ -22,7 +22,7 @@ namespace TransGuzman_UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Crear(CreateRouteViewModel routeVM)
+        public async Task<IActionResult> Crear(RouteCreateViewModel routeVM)
         {
 
             IActionResult result;
@@ -32,11 +32,11 @@ namespace TransGuzman_UI.Controllers
                 {
                     var driverID = await TransportersBL.GetTransporterIDByLicenseAsyncBL(routeVM.DriverLicenseNumber);
                     var newRoute = new Route();
-                    newRoute.DriverID = driverID;
-                    newRoute.TruckLicenseNumber = routeVM.VehicleLicensePlate;
-                    newRoute.OriginCode = routeVM.OriginProvince;
-                    newRoute.DestinationCode = routeVM.DestinationProvince;
-                    newRoute.Kilometers = routeVM.Distance;
+                    newRoute.TransporterID = driverID;
+                    newRoute.VehicleID = routeVM.VehicleLicensePlate;
+                    newRoute.OriginProvinceID = routeVM.OriginProvince;
+                    newRoute.DestinatinProvinceID = routeVM.DestinationProvince;
+                    newRoute.TraveledKM = routeVM.Distance;
 
                     bool succeeded = await RoutesBL.CreateNewAsyncBL(newRoute);
                     if (succeeded)

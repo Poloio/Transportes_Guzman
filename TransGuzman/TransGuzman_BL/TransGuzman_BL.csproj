@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.23" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TransGuzman_DAL\TransGuzman_DAL.csproj" />
     <ProjectReference Include="..\TransGuzman_Entities\TransGuzman_Entities.csproj" />
   </ItemGroup>
