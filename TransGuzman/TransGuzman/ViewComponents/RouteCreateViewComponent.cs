@@ -10,10 +10,15 @@ namespace TransGuzman_UI.ViewComponents
 {
     public class RouteCreateViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync()
+        private readonly TransportContext _context;
+        public RouteCreateViewComponent(TransportContext context)
         {
-            var vm = new RouteCreateViewModel();
-            await vm.FillProvinceOptions();
+            _context = context;
+        }
+        public IViewComponentResult Invoke()
+        {
+            var vm = new RouteCreateViewModel(_context);
+            vm.FillProvinceOptions();
             return View(vm);
         }
     }

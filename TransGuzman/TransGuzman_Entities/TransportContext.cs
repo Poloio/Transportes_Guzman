@@ -16,6 +16,7 @@ namespace TransGuzman_Entities
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Package> Packages { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<RoutePackage> RoutePackages { get; set; }
 
         public TransportContext(DbContextOptions<TransportContext> options) : base(options)
         { }

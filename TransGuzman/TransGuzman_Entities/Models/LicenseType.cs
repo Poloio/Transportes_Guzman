@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TransGuzman_Entities
+namespace TransGuzman_Entities.Models
 {
     public class LicenseType
     {

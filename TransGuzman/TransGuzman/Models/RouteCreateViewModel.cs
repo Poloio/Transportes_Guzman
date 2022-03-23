@@ -4,12 +4,19 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using TransGuzman_DAL;
+using TransGuzman_Entities;
 
 namespace TransGuzman_UI.Models
 {
     public class RouteCreateViewModel
     {
+        private readonly TransportContext _context;
+
+        public RouteCreateViewModel (TransportContext context)
+        {
+            _context = context;
+        }
+
         [Display(Name = "DNI de conductor")]
         public string DriverLicenseNumber { get; set; }
 
@@ -29,10 +36,10 @@ namespace TransGuzman_UI.Models
 
         public List<SelectListItem> ProvinceOptions { get; set; }
 
-        public async Task FillProvinceOptions()
+        public void FillProvinceOptions()
         {
             ProvinceOptions = new List<SelectListItem>();
-            foreach (var province in await ProvincesDAL.GetAllAsync())
+            foreach (var province in _context.Provinces.ToList())
             {
                 ProvinceOptions.Add(new SelectListItem { Text = province.Name, Value = province.ID.ToString() });
             }

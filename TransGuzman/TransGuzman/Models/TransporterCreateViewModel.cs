@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using TransGuzman_DAL;
 using TransGuzman_Entities;
+using TransGuzman_Entities.Models;
 
 namespace TransGuzman_UI.Models
 {
@@ -33,11 +33,19 @@ namespace TransGuzman_UI.Models
         [Display(Name = "Fecha de caducidad")]
         public DateTime ExpireDate { get; set; }
 
+
+        private readonly TransportContext _context;
+
+        public TransporterCreateViewModel(TransportContext context)
+        {
+            _context = context;
+        }
+
         public Transporter Transporter
         {
             get
             {
-                return new Transporter(IDLicense, FirstName, LastName, YearOfBirth);
+                return new Transporter { DriverLicenseID = IDLicense, FirstName = FirstName, LastName = LastName, YearOfBirth = YearOfBirth};
             }
         }
 
@@ -45,16 +53,16 @@ namespace TransGuzman_UI.Models
         {
             get
             {
-                return new DriverLicense(IDLicense, LicenseType, ExpireDate);
+                return new DriverLicense { LicenseID = IDLicense, LicenseTypeID = LicenseType, ExpireDate = ExpireDate };
             }
         }
 
         public List<SelectListItem> LicenseTypeOptions { get; set; }
 
-        public async Task FillLicenseTypeOptions()
+        public void FillLicenseTypeOptions()
         {
             LicenseTypeOptions = new List<SelectListItem>();
-            var typeList = await DriverLicensesDAL.GetLicenseTypesAsync();
+            var typeList = _context.LicenseTypes.ToList();
             foreach (var type in typeList)
             {
                 LicenseTypeOptions.Add(new SelectListItem { Text = type.Name, Value = type.Name });

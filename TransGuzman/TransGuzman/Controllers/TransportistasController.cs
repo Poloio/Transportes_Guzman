@@ -1,33 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TransGuzman_BL;
 using TransGuzman_Entities;
+using TransGuzman_Entities.Models;
 using TransGuzman_UI.Models;
 
 namespace TransGuzman_UI.Controllers
 {
     public class TransportistasController : Controller
     {
+        private readonly TransportContext _context;
+
+        public TransportistasController(TransportContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index(string sortMode)
         {
             return View((object) sortMode);
         }
 
         
-        public async Task<IActionResult> Detalles(string employeeId)
+        public async Task<IActionResult> Detalles(int? id)
         {
             IActionResult result;
-            if (employeeId == null) 
+            if (id == null) 
             {
                 result = RedirectToAction("Index");
             } else
             {
                 try
                 {
-                    var transporter = await TransportersBL.GetTransporterAsyncBL(employeeId);
+                    var transporter = await _context.Transporters.FindAsync(id);
                     if (transporter != null)
                         result = View(transporter);
                     else //IF transporter doesn't exist
@@ -55,15 +63,20 @@ namespace TransGuzman_UI.Controllers
             { 
                 try
                 {
-                    bool licenseOk = await DriverLicensesBL.CreateNewAsyncBL(viewmodel.License);
-                    bool transporterOk = await TransportersBL.CreateNewAsyncBL(viewmodel.Transporter);
-                    bool succeeded = licenseOk && transporterOk;
+                    var licenseAddResult = await _context.DriverLicenses.AddAsync(viewmodel.License);
+                    var transporterAddResult = await _context.Transporters.AddAsync(viewmodel.Transporter);
+                    bool succeeded = transporterAddResult.State == EntityState.Added
+                        && licenseAddResult.State == EntityState.Added;
                     if (succeeded)
                     {
+                        await _context.SaveChangesAsync();
                         result = View("Index");
                     }
                     else
                     {
+                        _context.ChangeTracker.Entries()
+                            .Where(e => e.Entity != null).ToList()
+                            .ForEach(e => e.State = EntityState.Detached);
                         result = RedirectToAction("Error", "Home");
                     }
                 } catch (Exception e)
@@ -78,10 +91,10 @@ namespace TransGuzman_UI.Controllers
             return result;
         }
 
-        public async Task<IActionResult> Editar(string employeeId)
+        public async Task<IActionResult> Editar(int? id)
         {
             IActionResult result;
-            if (employeeId == null)
+            if (id == null)
             {
                 result = RedirectToAction("Error","Home");
             }
@@ -89,7 +102,7 @@ namespace TransGuzman_UI.Controllers
             {
                 try
                 {
-                    var transporter = await TransportersBL.GetTransporterAsyncBL(employeeId);
+                    var transporter = await _context.Transporters.FindAsync(id);
                     result = View(transporter);
                 } catch (Exception e)
                 {
@@ -103,7 +116,7 @@ namespace TransGuzman_UI.Controllers
         public async Task<IActionResult> Editar(Transporter newTransporter)
         {
             var EmployeeID = newTransporter.TransporterID;
-            var IDLicense = newTransporter.IDLicense;
+            var IDLicense = newTransporter.DriverLicenseID;
             var FirstName = newTransporter.FirstName;
             var LastName = newTransporter.LastName;
             var YearOfBirth = newTransporter.YearOfBirth;
@@ -113,15 +126,21 @@ namespace TransGuzman_UI.Controllers
             {
                 var updatedTransporter = new Transporter();
                 updatedTransporter.TransporterID = EmployeeID;
-                updatedTransporter.IDLicense = IDLicense;
+                updatedTransporter.DriverLicenseID = IDLicense;
                 updatedTransporter.FirstName = FirstName;
                 updatedTransporter.LastName = LastName;
                 updatedTransporter.YearOfBirth = YearOfBirth;
 
-                bool succeeded = await TransportersBL.UpdateTransporterAsyncBL(updatedTransporter);
+                bool succeeded = _context.Update(updatedTransporter).State == EntityState.Modified;
                 if (succeeded)
+                {
+                    await _context.SaveChangesAsync();
                     result = RedirectToAction("Index");
+                }
                 else
+                    _context.ChangeTracker.Entries()
+                            .Where(e => e.Entity != null).ToList()
+                            .ForEach(e => e.State = EntityState.Detached);
                     result = RedirectToAction("Error", "Home");
             }
             else
@@ -131,16 +150,22 @@ namespace TransGuzman_UI.Controllers
             return result;
         }
 
-        public async Task<IActionResult> Borrar(string employeeId)
+        public async Task<IActionResult> Borrar(int id)
         {
             IActionResult result;
-            bool deleteSuccessful = await TransportersBL.DeleteByIDAsyncBL(employeeId);
-            if (deleteSuccessful)
+            var transporterToDelete = _context.Transporters.Find(id);
+            
+            var successful = _context.Transporters.Remove(transporterToDelete).State == EntityState.Deleted;
+            if (successful)
             {
+                await _context.SaveChangesAsync();
                 result = RedirectToAction("Index");
             }
             else
             {
+                _context.ChangeTracker.Entries()
+                            .Where(e => e.Entity != null).ToList()
+                            .ForEach(e => e.State = EntityState.Detached);
                 result = RedirectToAction("Error", "Home");
             }
             return result;

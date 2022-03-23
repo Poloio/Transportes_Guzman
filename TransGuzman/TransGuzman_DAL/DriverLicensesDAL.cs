@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TransGuzman_Entities;
 
-namespace TransGuzman_DAL
+namespace TransGuzman_DAL.Models
 {
     public static class DriverLicensesDAL
     {

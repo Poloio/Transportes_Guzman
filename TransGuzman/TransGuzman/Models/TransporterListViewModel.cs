@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using TransGuzman_BL;
+using TransGuzman_Entities;
 using TransGuzman_UI.Models.Interfaces;
 
 namespace TransGuzman_UI.Models
@@ -15,9 +15,12 @@ namespace TransGuzman_UI.Models
         public SelectListItem SelectedListItem { get; set; }
         public DataTable EntitiesTable { get; set; }
         public string SortMode { get; set; }
+
+        private readonly TransportContext _context;
         
-        public TransporterListViewModel (string sortMode)
+        public TransporterListViewModel (string sortMode, TransportContext context)
         {
+            _context = context;
             this.SortMode = sortMode;
             //Fill select items
             FillSelectItems();
@@ -50,9 +53,9 @@ namespace TransGuzman_UI.Models
             }
         }
 
-        public async Task FillTableAsync()
+        public void FillTable()
         {
-            EntitiesTable = await GetItemsAsync();
+            var table = CreateDataTable();
             var tempTableView = EntitiesTable.DefaultView;
             tempTableView = OrderTable(tempTableView, SortMode);
             EntitiesTable = tempTableView.ToTable();
@@ -79,10 +82,40 @@ namespace TransGuzman_UI.Models
             return tempTableView;
         }
 
-        private async Task<DataTable> GetItemsAsync()
+        private DataTable CreateDataTable()
         {
-            return await TransportersBL.GetTransportersDataTableAsync();
+            DataTable viewTable = new DataTable();
+
+            //Construct a view table for the datatable using LINQ query
+            var viewRowsList = (from tp in _context.Transporters
+                                select new
+                                {
+                                    LicenseID = tp.DriverLicenseID,
+                                    LicenseType = _context.DriverLicenses.First(dl => dl.LicenseID == tp.DriverLicenseID)
+                                        .LicenseTypeID,
+                                    FirstName = tp.FirstName,
+                                    LastName = tp.LastName,
+                                    YearOfBirth = tp.YearOfBirth
+                                }).ToList();
+
+            AddColumnsToDataTable(viewTable);
+
+            //Fill datatable with rows
+            viewRowsList.ForEach(row =>
+            {
+                viewTable.Rows.Add(row);
+            });
+
+            return viewTable;
         }
 
+        private void AddColumnsToDataTable(DataTable viewTable)
+        {
+            viewTable.Columns.Add(new DataColumn { ColumnName = "DNI" });
+            viewTable.Columns.Add(new DataColumn { ColumnName = "Tipo de permiso" });
+            viewTable.Columns.Add(new DataColumn { ColumnName = "Nombre" });
+            viewTable.Columns.Add(new DataColumn { ColumnName = "Apellidos" });
+            viewTable.Columns.Add(new DataColumn { ColumnName = "Año de nacimeinto" });
+        }
     }
 }

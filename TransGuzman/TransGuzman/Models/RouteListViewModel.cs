@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using TransGuzman_BL;
+using TransGuzman_Entities;
 using TransGuzman_UI.Models.Interfaces;
 
 namespace TransGuzman_UI.Models
@@ -15,12 +15,18 @@ namespace TransGuzman_UI.Models
         public SelectListItem SelectedListItem { get; set; }
         public DataTable EntitiesTable { get; set; }
         public string SortMode { get; set; }
+        private readonly TransportContext _context;
 
-        public RouteListViewModel(string _sortmode)
+        public RouteListViewModel(string _sortmode, TransportContext context)
         {
+            _context = context;
             SortMode = _sortmode;
             FillSelectItems();
             SetSelectedItem();
+            EntitiesTable = CreateDataTable();
+            var tempTableView = EntitiesTable.DefaultView;
+            tempTableView = OrderTable(tempTableView);
+            EntitiesTable = tempTableView.ToTable();
         }
 
         private void SetSelectedItem()
@@ -50,15 +56,6 @@ namespace TransGuzman_UI.Models
             OrderSelectItems.Add(new SelectListItem { Text = "Distancia recorrida(más a menos)", Value = "km_recorridos desc" });
         }
 
-
-        public async Task FillTableAsync()
-        {
-            EntitiesTable = await GetItemsAsync();
-            var tempTableView = EntitiesTable.DefaultView;
-            tempTableView = OrderTable(tempTableView);
-            EntitiesTable = tempTableView.ToTable();
-        }
-
         private DataView OrderTable(DataView tempTableView)
         {
             switch (SortMode)
@@ -82,9 +79,66 @@ namespace TransGuzman_UI.Models
             return tempTableView;
         }
 
-        private async Task<DataTable> GetItemsAsync()
+        public void FillTable()
         {
-            return await RoutesBL.GetDataTableAsync();
+            var table = CreateDataTable();
+            var tempTableView = table.DefaultView;
+            tempTableView = OrderTable(tempTableView);
+            EntitiesTable = tempTableView.ToTable();
         }
+
+        private DataTable CreateDataTable()
+        {
+            DataTable viewTable = new DataTable();
+
+            //Construct a view table for the datatable using LINQ query
+            var viewRowsList = (from route in _context.Routes
+                                select new
+                                {
+                                    ID_Ruta = route.RouteID,
+                                    DNI_Conductor = _context.Transporters.First(tr => tr.TransporterID == route.TransporterID)
+                                       .DriverLicenseID,
+                                    Matricula_de_Vehiculo = route.VehicleID,
+                                    Provincia_de_origen = _context.Provinces.First(prv => prv.ID == route.OriginProvinceID)
+                                       .Name,
+                                    Provincia_de_destino = _context.Provinces.First(prv => prv.ID == route.DestinationProvinceID)
+                                       .Name,
+                                    Distancia_en_KM = route.TraveledKM,
+                                    Carga = _context.RoutePackages.Join(
+                                               _context.Packages,
+                                               rtPackage => rtPackage.PackageID,
+                                               package => package.PackageID,
+                                               (rtPackage, package) => new
+                                               {
+                                                   RouteID = rtPackage.RouteID,
+                                                   PackageID = package.PackageID,
+                                                   Weight = package.Weight
+                                               }
+                                           ).Where(rec => rec.RouteID == route.RouteID)
+                                           .Select(rec => rec.Weight ?? 0).Sum()
+                                }).ToList();
+
+            AddColumnsToDataTable(viewTable);
+
+            //Fill datatable with rows
+            viewRowsList.ForEach(row =>
+            {
+                viewTable.Rows.Add(row);
+            });
+
+            return viewTable;
+        }
+
+        private void AddColumnsToDataTable(DataTable viewTable)
+        {
+            viewTable.Columns.Add(new DataColumn { ColumnName = "ID Ruta" });
+            viewTable.Columns.Add(new DataColumn { ColumnName = "DNI de conductor" });
+            viewTable.Columns.Add(new DataColumn { ColumnName = "Matrícula de vehículo" });
+            viewTable.Columns.Add(new DataColumn { ColumnName = "Origen" });
+            viewTable.Columns.Add(new DataColumn { ColumnName = "Destino" });
+            viewTable.Columns.Add(new DataColumn { ColumnName = "Distancia (KM)" });
+            viewTable.Columns.Add(new DataColumn { ColumnName = "Carga (Kg)" });
+        }
+
     }
 }

@@ -9,7 +9,7 @@ namespace TransGuzman_Entities.Models
     {
         //PK,  don't modify
         [Display(Name = "ID de Empleado")]
-        public string TransporterID { get; set; }
+        public int TransporterID { get; set; }
 
         [Required(ErrorMessage = "Campo requerido")]
         [Display(Name = "DNI/Permiso")]

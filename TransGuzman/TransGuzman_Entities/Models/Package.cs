@@ -8,7 +8,7 @@ namespace TransGuzman_Entities.Models
     {
         public int PackageID { get; set; }
         public int ClientID { get; set; }
-        public double Weight { get; set; }
+        public int? Weight { get; set; }
 
         public Client Client { get; set; }
         public ICollection<RoutePackage> RoutePackages { get; set; }

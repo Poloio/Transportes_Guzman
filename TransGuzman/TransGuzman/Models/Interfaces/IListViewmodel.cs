@@ -14,6 +14,6 @@ namespace TransGuzman_UI.Models.Interfaces
         public DataTable EntitiesTable { get; set; }
         public string SortMode { get; set; }
 
-        public Task FillTableAsync();
+        public void FillTable();
     }
 }

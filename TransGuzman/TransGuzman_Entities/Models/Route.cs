@@ -10,8 +10,8 @@ namespace TransGuzman_Entities.Models
         [Display(Name = "Número de ruta")]
         public int RouteID { get; set; }
 
-        [Display(Name = "DNI Conductor")]
-        public string? TransporterID { get; set; }
+        [Display(Name = "ID Conductor")]
+        public int? TransporterID { get; set; }
 
         [Display(Name = "Matrícula de vehículo")]
         public string? VehicleID { get; set; }
@@ -22,7 +22,7 @@ namespace TransGuzman_Entities.Models
 
         [Display(Name = "Provincia de destino")]
         [Required(ErrorMessage = "Campo requerido")]
-        public int DestinatinProvinceID { get; set; }
+        public int DestinationProvinceID { get; set; }
 
         [Display(Name = "Distancia recorrida")]
         public int? TraveledKM { get; set; }

@@ -3,13 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransGuzman_UI", "TransGuzman\TransGuzman_UI.csproj", "{A51101E3-F504-4FFD-9C2C-2C4347D8EC89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransGuzman_UI", "TransGuzman\TransGuzman_UI.csproj", "{A51101E3-F504-4FFD-9C2C-2C4347D8EC89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransGuzman_DAL", "TransGuzman_DAL\TransGuzman_DAL.csproj", "{9130D36F-E83F-4AB6-9D98-C722E270AF69}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransGuzman_BL", "TransGuzman_BL\TransGuzman_BL.csproj", "{944EEBB7-D3D4-4E3B-BE27-040B928060A0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransGuzman_Entities", "TransGuzman_Entities\TransGuzman_Entities.csproj", "{70EE9F11-AC90-4793-AE62-488299A01600}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransGuzman_Entities", "TransGuzman_Entities\TransGuzman_Entities.csproj", "{70EE9F11-AC90-4793-AE62-488299A01600}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,14 +17,6 @@ Global
 		{A51101E3-F504-4FFD-9C2C-2C4347D8EC89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A51101E3-F504-4FFD-9C2C-2C4347D8EC89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A51101E3-F504-4FFD-9C2C-2C4347D8EC89}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9130D36F-E83F-4AB6-9D98-C722E270AF69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9130D36F-E83F-4AB6-9D98-C722E270AF69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9130D36F-E83F-4AB6-9D98-C722E270AF69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9130D36F-E83F-4AB6-9D98-C722E270AF69}.Release|Any CPU.Build.0 = Release|Any CPU
-		{944EEBB7-D3D4-4E3B-BE27-040B928060A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{944EEBB7-D3D4-4E3B-BE27-040B928060A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{944EEBB7-D3D4-4E3B-BE27-040B928060A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{944EEBB7-D3D4-4E3B-BE27-040B928060A0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{70EE9F11-AC90-4793-AE62-488299A01600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{70EE9F11-AC90-4793-AE62-488299A01600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70EE9F11-AC90-4793-AE62-488299A01600}.Release|Any CPU.ActiveCfg = Release|Any CPU
